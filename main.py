@@ -38,7 +38,7 @@ def run_knn(points):
        # print(f'predicted class: {m.predict(points[0])}')
        # print(f'true class: {points[0].label}')
         cv = CrossValidation()
-        cv.run_cv(points, 10, m, accuracy_score,print_final_score=True)
+        cv.run_cv(points, 10, m, accuracy_score,print_final_score=False)
 
 
 
@@ -59,18 +59,28 @@ def implementation(points):
         if max < temp_average_score:
             max = temp_average_score
             best_k = i + 1
+
     print("Question 3:")
     print(f'K={best_k}')
-    list=[2,10,20]
+    list_n_folds=[2,10,20]
     K_Q3=KNN(best_k)
     K_Q3.train(points)
-    for i in list:
-        print(f'{i}-fold-cross-validation:')
-        temp_average_score = cv.run_cv(points, i, K_Q3, accuracy_score,print_final_score=False,print_fold_score=True)
+    for n in list_n_folds:
+        print(f'{n}-fold-cross-validation:')
+        print(f' Best K={best_k}, Max accuracy={max}')
+        cv.run_cv(points, n, K_Q3, accuracy_score,print_final_score=False,print_fold_score=True)
 
     print("Question 4:")
-    K_Q3 = KNN(7)
-
+    list_K=[5,7]
+    list_Norm=["DummyNormalizer", "SumNormalizer", "MinMaxNormalizer", "ZNormalizer"]
+    n_folds_Q4=2
+    for k in list_K:
+        for norm in list_Norm:
+            K_Q4 = KNN(k)
+            K_Q4.train(points)
+            print(f'K={k}')
+            avg_acc = cv.run_cv(points, n_folds_Q4, K_Q4, accuracy_score, print_final_score=False, print_fold_score=True)
+            print('Accuracy of {} is {:.2f}'.format(norm,avg_acc))
 
 
 
