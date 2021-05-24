@@ -38,7 +38,7 @@ def run_knn(points):
        # print(f'predicted class: {m.predict(points[0])}')
        # print(f'true class: {points[0].label}')
         cv = CrossValidation()
-        cv.run_cv(points, 10, m, accuracy_score,print_final_score=False)
+        cv.run_cv(points, 10, m, accuracy_score,print_final_score=True)
 
 
 
@@ -55,14 +55,14 @@ def implementation(points):
         # print(f'predicted class: {m.predict(points[0])}')
         # print(f'true class: {points[0].label}')
         cv = CrossValidation()
-        temp_average_score = cv.run_cv(points, 100, m, accuracy_score,print_final_score=False)
+        temp_average_score = cv.run_cv(points, len(points), m, accuracy_score,print_final_score=False)
         if max < temp_average_score:
             max = temp_average_score
             best_k = i + 1
     print("Question 3:")
     print(f'K={best_k}')
     list=[2,10,20]
-    K_Q3=KNN(7)
+    K_Q3=KNN(best_k)
     K_Q3.train(points)
     for i in list:
         print(f'{i}-fold-cross-validation:')
