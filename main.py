@@ -32,20 +32,23 @@ def load_data():
 
 
 def run_knn(points):
-
         m = KNN()
         m.train(points)
-       # print(f'predicted class: {m.predict(points[0])}')
-       # print(f'true class: {points[0].label}')
+        # print(f'predicted class: {m.predict(points[0])}')
+        # print(f'true class: {points[0].label}')
         cv = CrossValidation()
         cv.run_cv(points, 10, m, accuracy_score,print_final_score=False)
 
 
-
-
-#  this part is the code for q2
-
 def implementation(points):
+    # Q1
+    # m = KNN()
+    # m.train(points)
+    # predicted = m.predict(points)
+    # real = [point.get_label() for point in points]
+    # print(sum([real[i] == predicted[i] for i in range(len(real))]) / len(real))
+
+    # Q2
     max = 0
     best_k = 0
     #  this part
@@ -67,26 +70,34 @@ def implementation(points):
     K_Q3.train(points)
     for n in list_n_folds:
         print(f'{n}-fold-cross-validation:')
-        print(f' Best K={best_k}, Max accuracy={max}')
+        # print(f'K={best_k}')
         cv.run_cv(points, n, K_Q3, accuracy_score,print_final_score=False,print_fold_score=True)
 
     print("Question 4:")
     list_K=[5,7]
-    list_Norm=["DummyNormalizer", "SumNormalizer", "MinMaxNormalizer", "ZNormalizer"]
+    dummy = DummyNormalizer()
+    z_norm = ZNormalizer()
+    sum_norm = SumNormalizer()
+    min_max_norm = MinMaxNormalizer()
+    list_Norm=[dummy, sum_norm, min_max_norm, z_norm]
     n_folds_Q4=2
     for k in list_K:
+        K_Q4 = KNN(k)
+        print(f'K={k}')
         for norm in list_Norm:
-            K_Q4 = KNN(k)
-            K_Q4.train(points)
-            print(f'K={k}')
-            avg_acc = cv.run_cv(points, n_folds_Q4, K_Q4, accuracy_score, print_final_score=False, print_fold_score=True)
-            print('Accuracy of {} is {:.2f}'.format(norm,avg_acc))
-
+            norm.fit(points)
+            t_points = norm.transform(points)
+            K_Q4.train(t_points)
+            avg_acc = cv.run_cv(t_points, n_folds_Q4, K_Q4, accuracy_score
+                                , print_final_score=False, print_fold_score=True)
+            print('Accuracy of {} is {:.2f}\n'.format(norm.print_name(), avg_acc))
 
 
 
 if __name__ == '__main__':
     loaded_points = load_data()
+    # for point in loaded_points:
+    #     print(point)
     run_knn(loaded_points)
     implementation(loaded_points)
 

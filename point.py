@@ -13,3 +13,9 @@ class Point:
 
     def set_coordinates(self, coordinates):
         self.coordinates = [float(x) for x in coordinates]
+
+    def get_label(self):
+        return self.label
+
+    def get_coordinates(self):
+        return self.coordinates
