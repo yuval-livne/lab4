@@ -68,7 +68,7 @@ def implementation(points):
     for n in list_n_folds:
         print(f'{n}-fold-cross-validation:')
         # print(f'K={best_k}')
-        cv.run_cv(points, n, K_Q3, accuracy_score, print_final_score=False, print_fold_score=True)
+        cv.run_cv(points, n, k_q3, accuracy_score, print_final_score=False, print_fold_score=True)
 
     print("Question 4:")
     list_k = [5, 7]
@@ -87,7 +87,9 @@ def implementation(points):
             k_q4.train(t_points)
             avg_acc = cv.run_cv(t_points, n_folds_q4, k_q4, accuracy_score,
                                 print_final_score=False, print_fold_score=True)
-            print('Accuracy of {} is {:.2f}\n'.format(norm.print_name(), avg_acc))
+            print('Accuracy of {} is {:.2f}'.format(norm.print_name(), avg_acc))
+            if not(norm == list_norm[-1] and k == list_k[-1]):
+                print()
 
 
 if __name__ == '__main__':
